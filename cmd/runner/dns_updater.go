@@ -9,6 +9,7 @@ import (
 func main() {
     cloudflareApiKey := flag.String("api-key", "", "Your Cloudflare API key/token")
     cloudflareAccountEmail := flag.String("api-email", "", "Your Cloudflare user email")
+    forceUpdate := flag.Bool("force", false, "Force update, even if cached IP accurate")
     flag.Parse()
 
     if *cloudflareApiKey == "" {
@@ -20,6 +21,6 @@ func main() {
     }
 
     log.Println("Running DNS update....")
-    go_cloudflare_dyndns.Run(*cloudflareApiKey, *cloudflareAccountEmail)
+    go_cloudflare_dyndns.Run(*cloudflareApiKey, *cloudflareAccountEmail, *forceUpdate)
     log.Println("Finished!")
 }
