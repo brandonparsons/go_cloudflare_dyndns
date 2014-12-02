@@ -1,7 +1,15 @@
 Cloudflare Dynamic DNS
 ====================
 
-Gets the current IP and updates Cloudflare DNS entries.
+Gets the current IP and updates Cloudflare DNS entries, respecting configurable service levels.
+
+
+Install
+-------
+
+`go get`
+`go run cmd/runner/dns_updater.go`
+`go install cmd/runner/dns_updater.go`
 
 Usage
 -----
