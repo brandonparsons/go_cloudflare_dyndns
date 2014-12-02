@@ -10,7 +10,7 @@ import (
     "github.com/bitly/go-simplejson"
 )
 
-func Run(apiKey string, apiEmail string, forceUpdate bool) {
+func Run(apiKey string, apiEmail string, domainsToCheck []string, serviceLevels []string, forceUpdate bool) {
     currentIP := getCurrentIP()
     cachedIP := getCachedIP()
 
@@ -23,7 +23,7 @@ func Run(apiKey string, apiEmail string, forceUpdate bool) {
 
     log.Println("IP is outdated - updating cache and Cloudflare")
     writeToIPCache(currentIP)
-    updateCloudFlare(apiKey, apiEmail, currentIP)
+    updateCloudFlare(apiKey, apiEmail, currentIP, domainsToCheck, serviceLevels)
 }
 
 /////////////////////
@@ -68,7 +68,7 @@ func fileExists(filename string) bool {
     return false
 }
 
-func updateCloudFlare(apiKey string, apiEmail string, currentIP string) {
+func updateCloudFlare(apiKey string, apiEmail string, currentIP string, domainsToCheck []string, serviceLevels []string) {
     baseURL := "https://www.cloudflare.com/api_json.html?"
     baseDomain := "brandonparsons.me"
     domain := "&z=" + url.QueryEscape(baseDomain)
@@ -87,8 +87,7 @@ func updateCloudFlare(apiKey string, apiEmail string, currentIP string) {
     js, err := simplejson.NewJson(body)
     records := js.GetPath("response", "recs", "objs").MustArray()
 
-    sitesToUpdate := []string{"pi", "vault"}
-    for _, site := range sitesToUpdate {
+    for domainIndex, site := range domainsToCheck {
         recordName := site + "." + baseDomain
         for _, record := range records {
             rec := record.(map[string]interface{})
@@ -101,7 +100,7 @@ func updateCloudFlare(apiKey string, apiEmail string, currentIP string) {
                 id := "&id=" + recordID.(string)
                 typ := "&type=" + recordType.(string)
                 ttl := "&ttl=" + recordTTL.(string)
-                serviceMode := "&service_mode=1"
+                serviceMode := "&service_mode=" + serviceLevels[domainIndex]
                 content := "&content=" + url.QueryEscape(currentIP)
                 nm := "&name=" + url.QueryEscape(recordName)
 

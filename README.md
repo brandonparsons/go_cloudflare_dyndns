@@ -1,18 +1,20 @@
 Cloudflare Dynamic DNS
 ====================
 
-Gets the current IP and updates Cloudflare DNS entries.  Hardcoded to update the following domains: `pi` and `vault`.
+Gets the current IP and updates Cloudflare DNS entries.
 
 Usage
 -----
 
 `crontab`:
 
-30 2 * * *  /usr/local/bin/dns_updater --api-key=<YOUR API KEY HERE> --api-email=<YOUR ACCOUNT EMAIL HERE> >/dev/null 2>&1
+30 2 * * *  /usr/local/bin/dns_updater --api-key=YOUR_API_KEY_HERE --api-email=YOUR_ACCOUNT_EMAIL_HERE --domains pi,vault --servicelevels 0,1 >/dev/null 2>&1
 
 Options
 -------
 
 - api-key: String, required
 - api-email: String, required
+- domains: Comma-separated list of strings, required. Which subdomains should be updated?
+- servicelevels: Comma-separated list of 0|1, required. What service level should each domain have (read in the same order as `domains`.  0 = grey gloud, 1 = yellow cloud)
 - force: Boolean flag, optional.  Whether or not to update even if the cached IP matches current.
