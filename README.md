@@ -16,7 +16,7 @@ Usage
 
 `crontab`:
 
-30 2 * * *  /usr/local/bin/dns_updater --api-key=YOUR_API_KEY_HERE --api-email=YOUR_ACCOUNT_EMAIL_HERE --domains pi,vault --servicelevels 0,1 >/dev/null 2>&1
+30 2 * * *  /usr/local/bin/dns_updater --api-key=YOUR_API_KEY_HERE --api-email=YOUR_ACCOUNT_EMAIL_HERE --domains pi,vault,static --servicelevels 0,1,1 >/dev/null 2>&1
 
 Options
 -------
